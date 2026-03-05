@@ -1,11 +1,11 @@
 #!/bin/bash
 #
-#SBATCH --partition=gpu_min12gb
+#SBATCH --partition=gpu_min24gb
 #SBATCH --output=/nas-ctm01/homes/pfsousa/meddiff/logs/run_V0/output.out
 #SBATCH --error=/nas-ctm01/homes/pfsousa/meddiff/logs/run_V0/error.err
 #SBATCH --job-name=meddif
 #SBATCH --time=1-00:00
-#SBATCH --qos=gpu_min12GB
+#SBATCH --qos=gpu_min24GB
 
 PL_TORCH_DISTRIBUTED_BACKEND=gloo
 source activate base

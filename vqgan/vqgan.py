@@ -493,8 +493,6 @@ class VQGAN(pl.LightningModule):
         frame_idx = frame_idx.reshape(-1, 1, 1, 1, 1).repeat(1, C, 1, H, W)
         slice_real = torch.gather(x, 2, frame_idx).squeeze(2)
         slice_recon = torch.gather(x_recon, 2, frame_idx).squeeze(2)
-        print(f"Real Slice: {slice_real.shape}")
-        print(f"Recon Slice: {slice_recon.shape}")
 
         # --------------------------------------------------------------------------------------------
 

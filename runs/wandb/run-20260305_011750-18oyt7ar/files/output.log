@@ -1,2 +1,0 @@
-Decoder | Block 0 | in_channel: 960 | out_channel: 960 | stride: (2, 2, 2)
-Decoder | Block 1 | in_channel: 480 | out_channel: 240 | stride: (2, 2, 2)

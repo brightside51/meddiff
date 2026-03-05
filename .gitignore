@@ -1,0 +1,7 @@
+*.ckpt
+*.0
+*.pyc
+*.log
+*.wandb
+/nas-ctm01/homes/pfsousa/meddiff/logs/*
+/nas-ctm01/homes/pfsousa/meddiff/runs/wandb/*

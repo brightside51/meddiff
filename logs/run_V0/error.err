@@ -1,13 +1,15 @@
 [rank: 0] Seed set to 1234
+/nas-ctm01/homes/pfsousa/.conda/envs/meddiff/lib/python3.8/site-packages/torch/utils/data/dataloader.py:557: UserWarning: This DataLoader will create 12 worker processes in total. Our suggested max number of worker in current system is 8, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
 wandb: Currently logged in as: brightside51. Use `wandb login --relogin` to force relogin
 wandb: wandb version 0.25.0 is available!  To upgrade, please run:
 wandb:  $ pip install wandb --upgrade
 wandb: Tracking run with wandb version 0.12.21
-wandb: Run data is saved locally in /nas-ctm01/homes/pfsousa/meddiff/runs/wandb/run-20260305_181813-3c4ob8aa
+wandb: Run data is saved locally in /nas-ctm01/homes/pfsousa/meddiff/runs/wandb/run-20260305_233439-3rhdet54
 wandb: Run `wandb offline` to turn off syncing.
-wandb: Syncing run V0 (18:18 05/03/2026)
+wandb: Syncing run V0 (23:34 05/03/2026)
 wandb: ⭐️ View project at https://wandb.ai/brightside51/meddiff
-wandb: 🚀 View run at https://wandb.ai/brightside51/meddiff/runs/3c4ob8aa
+wandb: 🚀 View run at https://wandb.ai/brightside51/meddiff/runs/3rhdet54
 /nas-ctm01/homes/pfsousa/.conda/envs/meddiff/lib/python3.8/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and will be removed in 0.15, please use 'weights' instead.
   warnings.warn(
 /nas-ctm01/homes/pfsousa/.conda/envs/meddiff/lib/python3.8/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and will be removed in 0.15. The current behavior is equivalent to passing `weights=VGG16_Weights.IMAGENET1K_V1`. You can also use `weights=VGG16_Weights.DEFAULT` to get the most up-to-date weights.
@@ -24,19 +26,21 @@ LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
 
   | Name          | Type                  | Params
 --------------------------------------------------------
-0 | encoder       | Encoder               | 88.8 K
-1 | decoder       | Decoder               | 177 K 
-2 | pre_conv      | SamePadConv3d         | 264   
-3 | post_conv     | SamePadConv3d         | 288   
+0 | encoder       | Encoder               | 1.4 M 
+1 | decoder       | Decoder               | 2.8 M 
+2 | pre_conv      | SamePadConv3d         | 4.1 K 
+3 | post_conv     | SamePadConv3d         | 4.2 K 
 4 | codebook      | Codebook              | 0     
 5 | img_disc      | NLayerDiscriminator   | 2.8 M 
 6 | vid_disc      | NLayerDiscriminator3D | 11.0 M
 7 | percept_model | LPIPS                 | 14.7 M
 --------------------------------------------------------
-14.1 M    Trainable params
+18.1 M    Trainable params
 14.7 M    Non-trainable params
-28.8 M    Total params
-115.189   Total estimated model params size (MB)
+32.8 M    Total params
+131.096   Total estimated model params size (MB)
+/nas-ctm01/homes/pfsousa/.conda/envs/meddiff/lib/python3.8/site-packages/torch/utils/data/dataloader.py:557: UserWarning: This DataLoader will create 12 worker processes in total. Our suggested max number of worker in current system is 8, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
 Traceback (most recent call last):
   File "main_V0.py", line 49, in <module>
     train_vqgan([metabreast_args, dukebreast_args], run_args)
@@ -68,17 +72,38 @@ Traceback (most recent call last):
     output = fn(*args, **kwargs)
   File "/nas-ctm01/homes/pfsousa/.conda/envs/meddiff/lib/python3.8/site-packages/pytorch_lightning/strategies/strategy.py", line 382, in training_step
     return self.lightning_module.training_step(*args, **kwargs)
-  File "/nas-ctm01/homes/pfsousa/meddiff/vqgan/vqgan.py", line 629, in training_step
+  File "/nas-ctm01/homes/pfsousa/meddiff/vqgan/vqgan.py", line 620, in training_step
     disc_loss = self.forward(x, optimiser_idx = 1)
-  File "/nas-ctm01/homes/pfsousa/meddiff/vqgan/vqgan.py", line 492, in forward
+  File "/nas-ctm01/homes/pfsousa/meddiff/vqgan/vqgan.py", line 486, in forward
     vq_out = self.codebook(z)
   File "/nas-ctm01/homes/pfsousa/.conda/envs/meddiff/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1130, in _call_impl
     return forward_call(*input, **kwargs)
   File "/nas-ctm01/homes/pfsousa/meddiff/vqgan/codebook.py", line 62, in forward
     encode_onehot = F.one_hot(encoding_indices, self.n_codes).type_as(
-RuntimeError: CUDA out of memory. Tried to allocate 7.50 GiB (GPU 0; 11.90 GiB total capacity; 3.99 GiB already allocated; 7.22 GiB free; 4.02 GiB reserved in total by PyTorch) If reserved memory is >> allocated memory try setting max_split_size_mb to avoid fragmentation.  See documentation for Memory Management and PYTORCH_CUDA_ALLOC_CONF
+RuntimeError: CUDA out of memory. Tried to allocate 3.75 GiB (GPU 0; 7.92 GiB total capacity; 2.57 GiB already allocated; 1.95 GiB free; 5.35 GiB reserved in total by PyTorch) If reserved memory is >> allocated memory try setting max_split_size_mb to avoid fragmentation.  See documentation for Memory Management and PYTORCH_CUDA_ALLOC_CONF
 wandb: Waiting for W&B process to finish... (failed 1). Press Control-C to abort syncing.
-wandb: - 0.001 MB of 0.001 MB uploaded (0.000 MB deduped)wandb: \ 0.001 MB of 0.001 MB uploaded (0.000 MB deduped)wandb: | 0.001 MB of 0.008 MB uploaded (0.000 MB deduped)wandb: / 0.001 MB of 0.010 MB uploaded (0.000 MB deduped)wandb: - 0.001 MB of 0.010 MB uploaded (0.000 MB deduped)wandb: \ 0.001 MB of 0.010 MB uploaded (0.000 MB deduped)wandb: | 0.001 MB of 0.010 MB uploaded (0.000 MB deduped)wandb: / 0.001 MB of 0.010 MB uploaded (0.000 MB deduped)wandb: - 0.001 MB of 0.010 MB uploaded (0.000 MB deduped)wandb: \ 0.001 MB of 0.010 MB uploaded (0.000 MB deduped)wandb: | 0.008 MB of 0.010 MB uploaded (0.000 MB deduped)wandb: / 0.008 MB of 0.010 MB uploaded (0.000 MB deduped)wandb: - 0.010 MB of 0.010 MB uploaded (0.000 MB deduped)wandb: \ 0.010 MB of 0.010 MB uploaded (0.000 MB deduped)wandb: | 0.010 MB of 0.010 MB uploaded (0.000 MB deduped)wandb: / 0.010 MB of 0.010 MB uploaded (0.000 MB deduped)wandb: - 0.010 MB of 0.010 MB uploaded (0.000 MB deduped)wandb: \ 0.010 MB of 0.010 MB uploaded (0.000 MB deduped)wandb: | 0.010 MB of 0.010 MB uploaded (0.000 MB deduped)wandb: / 0.010 MB of 0.010 MB uploaded (0.000 MB deduped)wandb:                                                                                
-wandb: Synced V0 (18:18 05/03/2026): https://wandb.ai/brightside51/meddiff/runs/3c4ob8aa
+wandb: - 0.001 MB of 0.001 MB uploaded (0.000 MB deduped)wandb: \ 0.001 MB of 0.008 MB uploaded (0.000 MB deduped)wandb: | 0.001 MB of 0.011 MB uploaded (0.000 MB deduped)wandb: / 0.001 MB of 0.011 MB uploaded (0.000 MB deduped)wandb: - 0.001 MB of 0.011 MB uploaded (0.000 MB deduped)wandb: \ 0.001 MB of 0.011 MB uploaded (0.000 MB deduped)wandb: | 0.005 MB of 0.011 MB uploaded (0.000 MB deduped)wandb: / 0.005 MB of 0.011 MB uploaded (0.000 MB deduped)wandb: - 0.008 MB of 0.011 MB uploaded (0.000 MB deduped)wandb: \ 0.008 MB of 0.011 MB uploaded (0.000 MB deduped)wandb: | 0.011 MB of 0.011 MB uploaded (0.000 MB deduped)wandb: / 0.011 MB of 0.011 MB uploaded (0.000 MB deduped)wandb: - 0.011 MB of 0.011 MB uploaded (0.000 MB deduped)wandb: \ 0.011 MB of 0.011 MB uploaded (0.000 MB deduped)wandb: | 0.011 MB of 0.011 MB uploaded (0.000 MB deduped)wandb: / 0.011 MB of 0.011 MB uploaded (0.000 MB deduped)wandb:                                                                                
+wandb: 
+wandb: Run history:
+wandb:   train/vqgan/disc/disc_img_loss ▁
+wandb:       train/vqgan/disc/disc_loss ▁
+wandb:   train/vqgan/disc/disc_vid_loss ▁
+wandb: train/vqgan/disc/logits_img_fake ▁
+wandb: train/vqgan/disc/logits_img_real ▁
+wandb: train/vqgan/disc/logits_vid_fake ▁
+wandb: train/vqgan/disc/logits_vid_real ▁
+wandb:            train/vqgan/disc/step ▁
+wandb: 
+wandb: Run summary:
+wandb:   train/vqgan/disc/disc_img_loss 0.99658
+wandb:       train/vqgan/disc/disc_loss 0.0
+wandb:   train/vqgan/disc/disc_vid_loss 1.01758
+wandb: train/vqgan/disc/logits_img_fake 0.19653
+wandb: train/vqgan/disc/logits_img_real 0.20459
+wandb: train/vqgan/disc/logits_vid_fake -0.25586
+wandb: train/vqgan/disc/logits_vid_real -0.26245
+wandb:            train/vqgan/disc/step 0
+wandb: 
+wandb: Synced V0 (23:34 05/03/2026): https://wandb.ai/brightside51/meddiff/runs/3rhdet54
 wandb: Synced 6 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
-wandb: Find logs at: ./wandb/run-20260305_181813-3c4ob8aa/logs
+wandb: Find logs at: ./wandb/run-20260305_233439-3rhdet54/logs
