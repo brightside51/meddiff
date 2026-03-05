@@ -1,0 +1,37 @@
+{
+  "tabs": [
+    {
+      "name": "V0 (05/03/2026)",
+      "tabGroups": [
+        {
+          "files": [
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/runs/run_V0.sh",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/runs/main_V0.py",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/logs/run_V0/error.err",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/logs/run_V0/output.out"
+          ],
+          "viewColumn": 1
+        },
+        {
+          "files": [
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/run_parser.py",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/vqgan/vqgan.py",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/train/train_vqgan.py"
+          ],
+          "viewColumn": 2
+        }
+      ],
+      "layout": {
+        "orientation": 0,
+        "groups": [
+          {
+            "size": 515
+          },
+          {
+            "size": 547
+          }
+        ]
+      }
+    }
+  ]
+}
