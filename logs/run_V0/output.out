@@ -1,0 +1,38 @@
+no change     /usr/local/miniconda3/condabin/conda
+no change     /usr/local/miniconda3/bin/conda
+no change     /usr/local/miniconda3/bin/conda-env
+no change     /usr/local/miniconda3/bin/activate
+no change     /usr/local/miniconda3/bin/deactivate
+no change     /usr/local/miniconda3/etc/profile.d/conda.sh
+no change     /usr/local/miniconda3/etc/fish/conf.d/conda.fish
+no change     /usr/local/miniconda3/shell/condabin/Conda.psm1
+no change     /usr/local/miniconda3/shell/condabin/conda-hook.ps1
+no change     /usr/local/miniconda3/lib/python3.13/site-packages/xontrib/conda.xsh
+no change     /usr/local/miniconda3/etc/profile.d/conda.csh
+no change     /nas-ctm01/homes/pfsousa/.bashrc
+no change     /nas-ctm01/homes/pfsousa/.zshrc
+no change     /nas-ctm01/homes/pfsousa/.config/fish/config.fish
+no change     /nas-ctm01/homes/pfsousa/.xonshrc
+no change     /nas-ctm01/homes/pfsousa/.tcshrc
+No action taken.
+Loading ARGUMENT PARSER | /nas-ctm01/homes/pfsousa/data/metabreast/V0_args.yaml
+Loading ARGUMENT PARSER | /nas-ctm01/homes/pfsousa/data/dukebreast/V0_args.yaml
+Loading ARGUMENT PARSER | /nas-ctm01/homes/pfsousa/meddiff/runs/args_V0.yaml
+
+VQGAN Codebook | Allocated: 0.0 MB
+VQGAN Codebook | Reserved: 0.0 MB
+
+loaded pretrained LPIPS loss from /nas-ctm01/homes/pfsousa/meddiff/vqgan/cache/vgg.pth
+
+Full VQGAN | Allocated: 0.0 MB
+Full VQGAN | Reserved: 0.0 MB
+
+
+VQGAN Model | Allocated: 111.82080078125 MB
+VQGAN Model | Reserved: 116.0 MB
+
+Training: |          | 0/? [00:00<?, ?it/s]Training:   0% 0/857 [00:00<?, ?it/s]      Epoch 0:   0% 0/857 [00:00<?, ?it/s] cuda:0
+
+Batch Reading | Allocated: 113.82080078125 MB
+Batch Reading | Reserved: 116.0 MB
+

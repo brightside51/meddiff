@@ -1,0 +1,84 @@
+/nas-ctm01/homes/pfsousa/.conda/envs/meddiff/lib/python3.8/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and will be removed in 0.15, please use 'weights' instead.
+  warnings.warn(
+/nas-ctm01/homes/pfsousa/.conda/envs/meddiff/lib/python3.8/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and will be removed in 0.15. The current behavior is equivalent to passing `weights=VGG16_Weights.IMAGENET1K_V1`. You can also use `weights=VGG16_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+/nas-ctm01/homes/pfsousa/.conda/envs/meddiff/lib/python3.8/site-packages/lightning_fabric/connector.py:558: `precision=16` is supported for historical reasons but its usage is discouraged. Please set your precision to 16-mixed instead!
+/nas-ctm01/homes/pfsousa/.conda/envs/meddiff/lib/python3.8/site-packages/lightning_fabric/plugins/environments/slurm.py:191: The `srun` command is available on your system but is not used. HINT: If your intention is to run Lightning on SLURM, prepend your python command with `srun` like so: srun python main_V0.py ...
+Using 16bit Automatic Mixed Precision (AMP)
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+IPU available: False, using: 0 IPUs
+HPU available: False, using: 0 HPUs
+True
+Storage | Codebook Memory Consumption: 48
+loaded pretrained LPIPS loss from /nas-ctm01/homes/pfsousa/meddiff/vqgan/cache/vgg.pth
+Storage | LPIPS Memory Consumption: 48
+Storage | VQGAN Memory Consumption: 48
+Epoch 0:   0% 0/857 [00:00<?, ?it/s]
+/nas-ctm01/homes/pfsousa/.conda/envs/meddiff/lib/python3.8/site-packages/pytorch_lightning/trainer/configuration_validator.py:74: You defined a `validation_step` but have no `val_dataloader`. Skipping val loop.
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+  | Name          | Type                  | Params
+--------------------------------------------------------
+0 | encoder       | Encoder               | 88.8 K
+1 | decoder       | Decoder               | 177 K
+2 | pre_conv      | SamePadConv3d         | 264
+3 | post_conv     | SamePadConv3d         | 288
+4 | codebook      | Codebook              | 0
+5 | img_disc      | NLayerDiscriminator   | 2.8 M
+6 | vid_disc      | NLayerDiscriminator3D | 11.0 M
+7 | percept_model | LPIPS                 | 14.7 M
+--------------------------------------------------------
+14.1 M    Trainable params
+14.7 M    Non-trainable params
+28.8 M    Total params
+Epoch 0:   0% 0/857 [00:00<?, ?it/s] Fetching Data  | Patient ID Breast_MRI_184 | dicom Format
+Accessing Subject | Breast_MRI_184 60 -> 30 Slices
+Fetching Data  | Patient ID Breast_MRI_118 | dicom Format
+Accessing Subject | Breast_MRI_118 64 -> 30 Slices
+Fetching Data  | Patient ID Breast_MRI_193 | dicom Format
+Accessing Subject | Breast_MRI_193 68 -> 30 Slices
+Fetching Data  | Patient ID Breast_MRI_573 | dicom Format
+Accessing Subject | Breast_MRI_573 60 -> 30 Slices
+Fetching Data  | Patient ID ID50 | dicom Format
+Accessing Subject | ID50 60 -> 30 Slices
+Fetching Data  | Patient ID Breast_MRI_501 | dicom Format
+Accessing Subject | Breast_MRI_501 60 -> 30 Slices
+Fetching Data  | Patient ID Breast_MRI_688 | dicom Format
+Accessing Subject | Breast_MRI_688 69 -> 30 Slices
+Fetching Data  | Patient ID Breast_MRI_064 | dicom Format
+Accessing Subject | Breast_MRI_064 35 -> 30 Slices
+Fetching Data  | Patient ID Breast_MRI_520 | dicom Format
+Accessing Subject | Breast_MRI_520 55 -> 30 Slices
+Fetching Data  | Patient ID Breast_MRI_804 | dicom Format
+Accessing Subject | Breast_MRI_804 53 -> 30 Slices
+Fetching Data  | Patient ID Breast_MRI_345 | dicom Format
+Accessing Subject | Breast_MRI_345 60 -> 30 Slices
+Fetching Data  | Patient ID Breast_MRI_034 | dicom Format
+Accessing Subject | Breast_MRI_034 60 -> 30 Slices
+Fetching Data  | Patient ID Breast_MRI_394 | dicom Format
+Accessing Subject | Breast_MRI_394 54 -> 30 Slices
+Fetching Data  | Patient ID Breast_MRI_038 | dicom Format
+Accessing Subject | Breast_MRI_038 72 -> 30 Slices
+Fetching Data  | Patient ID Breast_MRI_135 | dicom Format
+Accessing Subject | Breast_MRI_135 60 -> 30 Slices
+Fetching Data  | Patient ID ID15 | dicom Format
+Accessing Subject | ID15 60 -> 30 Slices
+Fetching Data  | Patient ID Breast_MRI_374 | dicom Format
+Accessing Subject | Breast_MRI_374 60 -> 30 Slices
+Fetching Data  | Patient ID Breast_MRI_023 | dicom Format
+Accessing Subject | Breast_MRI_023 60 -> 30 Slices
+Fetching Data  | Patient ID PL_044_029_P | dicom Format
+Accessing Subject | PL_044_029_P 59 -> 30 Slices
+Fetching Data  | Patient ID Breast_MRI_356 | dicom Format
+Accessing Subject | Breast_MRI_356 44 -> 30 Slices
+Fetching Data  | Patient ID Breast_MRI_321 | dicom Format
+Accessing Subject | Breast_MRI_321 50 -> 30 Slices
+Fetching Data  | Patient ID Breast_MRI_121 | dicom Format
+Accessing Subject | Breast_MRI_121 60 -> 30 Slices
+Fetching Data  | Patient ID Breast_MRI_082 | dicom Format
+Accessing Subject | Breast_MRI_082 68 -> 30 Slices
+Fetching Data  | Patient ID Breast_MRI_047 | dicom Format
+Accessing Subject | Breast_MRI_047 72 -> 30 Slices
+Fetching Data  | Patient ID ID61 | dicom Format
+Accessing Subject | ID61 60 -> 30 Slices
+Storage | Batch Memory Consumption: 72

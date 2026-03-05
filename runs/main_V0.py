@@ -8,47 +8,42 @@ import os
 import random
 import argparse
 import torch
+import wandb
+import pytorch_lightning as pl
 
 # --------------------------------------------------------------------------------------------
 
-# Functionality Import
+# Functionality Import | Fundamentals
 from pathlib import Path
 from math import *
 from PIL import Image
-from torch.utils.data import Dataset, DataLoader, ConcatDataset
+from torch.utils.data import Dataset, DataLoader, ConcatDataset, dataset
+from datetime import datetime
+
+# Functionality Import | Torch
 from torchvision import transforms
+from torch.utils.data.distributed import DistributedSampler
+from torch.nn.parallel import DistributedDataParallel as DDP
+from torch.distributed import init_process_group, destroy_process_group
 
+# --------------------------------------------------------------------------------------------
 
-# Dataset Reader Import
+# Functionality Import | Custom
 sys.path.append('/nas-ctm01/homes/pfsousa/data')
 from data_parser import data_parser
-sys.path.append('/nas-ctm01/homes/pfsousa')
+sys.path.append('/nas-ctm01/homes/pfsousa/meddiff')
 from run_parser import run_parser
+sys.path.append('/nas-ctm01/homes/pfsousa/meddiff/vqgan')
+from vqgan import VQGAN
+sys.path.append('/nas-ctm01/homes/pfsousa/meddiff/train')
+from train_vqgan import train_vqgan
 
 # ============================================================================================
 
-# DATASET ACCESS
+# Argument Initialisation
+metabreast_args = data_parser(dataset = 'metabreast', dataV = 'V0', save = True)
+dukebreast_args = data_parser(dataset = 'dukebreast', dataV = 'V0', save = True)
+run_args = run_parser(model = 'meddiff', runV = 'V0', save = True)
 
-# Dataset Initialisation | Duke Breast Cancer
-dukebreast_args = data_parser(dataset = 'dukebreast', dataV = 'V0', save = False)
-sys.path.append(f'{dukebreast_args.reader_fp}')
-from reader import NCDataset as DukebreastDataset
-dukebreast_ds = DukebreastDataset(dukebreast_args, mode = 'train')
-dukebreast_img = dukebreast_ds.__getitem__(0)
-print(dukebreast_img.shape)
-
-# Dataset Initialisation | Metabreast
-metabreast_args = data_parser(dataset = 'metabreast', dataV = 'V0', save = False)
-sys.path.append(f'{metabreast_args.reader_fp}')
-from reader import NCDataset as MetabreastDataset
-metabreast_ds = MetabreastDataset(metabreast_args, mode = 'train')
-metabreast_img = metabreast_ds.__getitem__(0)
-print(metabreast_img.shape)
-
-# Dataloader Initialisation
-#train_ds = ConcatDataset([dukebreast_ds, metabreast_ds])
-
-# ============================================================================================
-
-# VQGAN TRAINING
-meddiff_args = run_parser(dataset = 'meddiff', dataV = 'V0', save = True)
+# VQGAN Training Script
+train_vqgan([metabreast_args, dukebreast_args], run_args)

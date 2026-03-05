@@ -1,4 +1,84 @@
+[rank: 0] Seed set to 1234
+wandb: Currently logged in as: brightside51. Use `wandb login --relogin` to force relogin
+wandb: wandb version 0.25.0 is available!  To upgrade, please run:
+wandb:  $ pip install wandb --upgrade
+wandb: Tracking run with wandb version 0.12.21
+wandb: Run data is saved locally in /nas-ctm01/homes/pfsousa/meddiff/runs/wandb/run-20260305_181813-3c4ob8aa
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run V0 (18:18 05/03/2026)
+wandb: ⭐️ View project at https://wandb.ai/brightside51/meddiff
+wandb: 🚀 View run at https://wandb.ai/brightside51/meddiff/runs/3c4ob8aa
+/nas-ctm01/homes/pfsousa/.conda/envs/meddiff/lib/python3.8/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and will be removed in 0.15, please use 'weights' instead.
+  warnings.warn(
+/nas-ctm01/homes/pfsousa/.conda/envs/meddiff/lib/python3.8/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and will be removed in 0.15. The current behavior is equivalent to passing `weights=VGG16_Weights.IMAGENET1K_V1`. You can also use `weights=VGG16_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+/nas-ctm01/homes/pfsousa/.conda/envs/meddiff/lib/python3.8/site-packages/lightning_fabric/connector.py:558: `precision=16` is supported for historical reasons but its usage is discouraged. Please set your precision to 16-mixed instead!
+/nas-ctm01/homes/pfsousa/.conda/envs/meddiff/lib/python3.8/site-packages/lightning_fabric/plugins/environments/slurm.py:191: The `srun` command is available on your system but is not used. HINT: If your intention is to run Lightning on SLURM, prepend your python command with `srun` like so: srun python main_V0.py ...
+Using 16bit Automatic Mixed Precision (AMP)
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+IPU available: False, using: 0 IPUs
+HPU available: False, using: 0 HPUs
+/nas-ctm01/homes/pfsousa/.conda/envs/meddiff/lib/python3.8/site-packages/pytorch_lightning/trainer/configuration_validator.py:74: You defined a `validation_step` but have no `val_dataloader`. Skipping val loop.
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+
+  | Name          | Type                  | Params
+--------------------------------------------------------
+0 | encoder       | Encoder               | 88.8 K
+1 | decoder       | Decoder               | 177 K 
+2 | pre_conv      | SamePadConv3d         | 264   
+3 | post_conv     | SamePadConv3d         | 288   
+4 | codebook      | Codebook              | 0     
+5 | img_disc      | NLayerDiscriminator   | 2.8 M 
+6 | vid_disc      | NLayerDiscriminator3D | 11.0 M
+7 | percept_model | LPIPS                 | 14.7 M
+--------------------------------------------------------
+14.1 M    Trainable params
+14.7 M    Non-trainable params
+28.8 M    Total params
+115.189   Total estimated model params size (MB)
 Traceback (most recent call last):
-  File "/nas-ctm01/homes/pfsousa/meddiff/runs/main_V0.py", line 35, in <module>
-    from reader import NCDataset as DukebreastDataset
-ModuleNotFoundError: No module named 'reader'
+  File "main_V0.py", line 49, in <module>
+    train_vqgan([metabreast_args, dukebreast_args], run_args)
+  File "/nas-ctm01/homes/pfsousa/meddiff/train/train_vqgan.py", line 115, in train_vqgan
+    trainer.fit(vqgan_model, train_dl)
+  File "/nas-ctm01/homes/pfsousa/.conda/envs/meddiff/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 544, in fit
+    call._call_and_handle_interrupt(
+  File "/nas-ctm01/homes/pfsousa/.conda/envs/meddiff/lib/python3.8/site-packages/pytorch_lightning/trainer/call.py", line 44, in _call_and_handle_interrupt
+    return trainer_fn(*args, **kwargs)
+  File "/nas-ctm01/homes/pfsousa/.conda/envs/meddiff/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 580, in _fit_impl
+    self._run(model, ckpt_path=ckpt_path)
+  File "/nas-ctm01/homes/pfsousa/.conda/envs/meddiff/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 989, in _run
+    results = self._run_stage()
+  File "/nas-ctm01/homes/pfsousa/.conda/envs/meddiff/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 1035, in _run_stage
+    self.fit_loop.run()
+  File "/nas-ctm01/homes/pfsousa/.conda/envs/meddiff/lib/python3.8/site-packages/pytorch_lightning/loops/fit_loop.py", line 202, in run
+    self.advance()
+  File "/nas-ctm01/homes/pfsousa/.conda/envs/meddiff/lib/python3.8/site-packages/pytorch_lightning/loops/fit_loop.py", line 359, in advance
+    self.epoch_loop.run(self._data_fetcher)
+  File "/nas-ctm01/homes/pfsousa/.conda/envs/meddiff/lib/python3.8/site-packages/pytorch_lightning/loops/training_epoch_loop.py", line 136, in run
+    self.advance(data_fetcher)
+  File "/nas-ctm01/homes/pfsousa/.conda/envs/meddiff/lib/python3.8/site-packages/pytorch_lightning/loops/training_epoch_loop.py", line 242, in advance
+    batch_output = self.manual_optimization.run(kwargs)
+  File "/nas-ctm01/homes/pfsousa/.conda/envs/meddiff/lib/python3.8/site-packages/pytorch_lightning/loops/optimization/manual.py", line 92, in run
+    self.advance(kwargs)
+  File "/nas-ctm01/homes/pfsousa/.conda/envs/meddiff/lib/python3.8/site-packages/pytorch_lightning/loops/optimization/manual.py", line 112, in advance
+    training_step_output = call._call_strategy_hook(trainer, "training_step", *kwargs.values())
+  File "/nas-ctm01/homes/pfsousa/.conda/envs/meddiff/lib/python3.8/site-packages/pytorch_lightning/trainer/call.py", line 309, in _call_strategy_hook
+    output = fn(*args, **kwargs)
+  File "/nas-ctm01/homes/pfsousa/.conda/envs/meddiff/lib/python3.8/site-packages/pytorch_lightning/strategies/strategy.py", line 382, in training_step
+    return self.lightning_module.training_step(*args, **kwargs)
+  File "/nas-ctm01/homes/pfsousa/meddiff/vqgan/vqgan.py", line 629, in training_step
+    disc_loss = self.forward(x, optimiser_idx = 1)
+  File "/nas-ctm01/homes/pfsousa/meddiff/vqgan/vqgan.py", line 492, in forward
+    vq_out = self.codebook(z)
+  File "/nas-ctm01/homes/pfsousa/.conda/envs/meddiff/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1130, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/nas-ctm01/homes/pfsousa/meddiff/vqgan/codebook.py", line 62, in forward
+    encode_onehot = F.one_hot(encoding_indices, self.n_codes).type_as(
+RuntimeError: CUDA out of memory. Tried to allocate 7.50 GiB (GPU 0; 11.90 GiB total capacity; 3.99 GiB already allocated; 7.22 GiB free; 4.02 GiB reserved in total by PyTorch) If reserved memory is >> allocated memory try setting max_split_size_mb to avoid fragmentation.  See documentation for Memory Management and PYTORCH_CUDA_ALLOC_CONF
+wandb: Waiting for W&B process to finish... (failed 1). Press Control-C to abort syncing.
+wandb: - 0.001 MB of 0.001 MB uploaded (0.000 MB deduped)wandb: \ 0.001 MB of 0.001 MB uploaded (0.000 MB deduped)wandb: | 0.001 MB of 0.008 MB uploaded (0.000 MB deduped)wandb: / 0.001 MB of 0.010 MB uploaded (0.000 MB deduped)wandb: - 0.001 MB of 0.010 MB uploaded (0.000 MB deduped)wandb: \ 0.001 MB of 0.010 MB uploaded (0.000 MB deduped)wandb: | 0.001 MB of 0.010 MB uploaded (0.000 MB deduped)wandb: / 0.001 MB of 0.010 MB uploaded (0.000 MB deduped)wandb: - 0.001 MB of 0.010 MB uploaded (0.000 MB deduped)wandb: \ 0.001 MB of 0.010 MB uploaded (0.000 MB deduped)wandb: | 0.008 MB of 0.010 MB uploaded (0.000 MB deduped)wandb: / 0.008 MB of 0.010 MB uploaded (0.000 MB deduped)wandb: - 0.010 MB of 0.010 MB uploaded (0.000 MB deduped)wandb: \ 0.010 MB of 0.010 MB uploaded (0.000 MB deduped)wandb: | 0.010 MB of 0.010 MB uploaded (0.000 MB deduped)wandb: / 0.010 MB of 0.010 MB uploaded (0.000 MB deduped)wandb: - 0.010 MB of 0.010 MB uploaded (0.000 MB deduped)wandb: \ 0.010 MB of 0.010 MB uploaded (0.000 MB deduped)wandb: | 0.010 MB of 0.010 MB uploaded (0.000 MB deduped)wandb: / 0.010 MB of 0.010 MB uploaded (0.000 MB deduped)wandb:                                                                                
+wandb: Synced V0 (18:18 05/03/2026): https://wandb.ai/brightside51/meddiff/runs/3c4ob8aa
+wandb: Synced 6 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20260305_181813-3c4ob8aa/logs

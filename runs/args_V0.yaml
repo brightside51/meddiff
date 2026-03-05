@@ -1,0 +1,45 @@
+base_fp: /nas-ctm01/homes/pfsousa
+log_interval: 1
+log_method: wandb
+logs_fp: /nas-ctm01/homes/pfsousa/meddiff/logs/run_V0
+model: meddiff
+num_gpu: 1
+runV: V0
+save_img: 2
+save_interval: 500
+script_fp: /nas-ctm01/homes/pfsousa/meddiff
+seed: 1234
+verbose: true
+vqgan:
+  dim_latent: 8
+  disc_channel: 64
+  disc_layer: 3
+  disc_loss: hinge
+  disc_start: 50000
+  downsample:
+  - 2
+  - 2
+  - 2
+  ganfeat_weight: 1.0
+  grad_accum: 1
+  grad_clip: 1.0
+  i3d_feat: false
+  img_weight: 1.0
+  l1_weight: 4.0
+  lr_base: 0.0003
+  lr_decay: 0.999
+  lr_min: 1.0e-06
+  lr_step: 250
+  norm_type: group
+  num_codes: 16384
+  num_epochs: -1
+  num_groups: 32
+  num_hidden: 16
+  num_steps: -1
+  pad_type: replicate
+  percept_weight: 0.0
+  rand_restart: false
+  restart_thres: 1.0
+  resume: false
+  resume_ckpt: /nas-ctm01/homes/pfsousa/meddiff/logs/run_V0/vqgan/latest.ckpt
+  vid_weight: 1.0

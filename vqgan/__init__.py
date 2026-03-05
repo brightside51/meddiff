@@ -1,3 +1,3 @@
-from vq_gan_3d.model.vqgan import VQGAN
-from vq_gan_3d.model.codebook import Codebook
-from vq_gan_3d.model.lpips import LPIPS
+from vqgan.vqgan import VQGAN
+from vqgan.codebook import Codebook
+from vqgan.lpips import LPIPS

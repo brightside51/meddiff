@@ -1,0 +1,24 @@
+{
+    "os": "Linux-5.15.0-156-generic-x86_64-with-glibc2.17",
+    "python": "3.8.20",
+    "heartbeatAt": "2026-03-05T16:00:34.782799",
+    "startedAt": "2026-03-05T16:00:26.427186",
+    "docker": null,
+    "gpu": "NVIDIA GeForce GTX 1080 Ti",
+    "gpu_count": 1,
+    "cpu_count": 32,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "main_V0.py",
+    "codePath": "runs/main_V0.py",
+    "git": {
+        "remote": "https://github.com/brightside51/meddiff.git",
+        "commit": "41738896df9312d0becfb0da567ba0c652087b58"
+    },
+    "email": null,
+    "root": "/nas-ctm01/homes/pfsousa/meddiff",
+    "host": "02.deep01",
+    "username": "pfsousa",
+    "executable": "/nas-ctm01/homes/pfsousa/.conda/envs/meddiff/bin/python"
+}
