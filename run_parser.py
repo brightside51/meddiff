@@ -30,7 +30,7 @@ def dict_to_namespace(d):
             d[k] = dict_to_namespace(v)
     return Namespace(**d)
 
-# --------------------------------------------------------------------------------------------
+# ============================================================================================
 
 # Run Arguments Initialisation
 def run_parser(
@@ -51,18 +51,16 @@ def run_parser(
     # --------------------------------------------------------------------------------------------
 
     # Load Existing Arguments if Available
-    save_fp = Path(f"{args.base_fp}/{args.model}/runs/args_{args.runV}.yaml")
-    #save_fp = Path(f"{args.base_fp}/{args.model}/runs/args_{args.runV}.json")
-    if save_fp.exists():
+    save_fp = f"{args.base_fp}/{args.model}/runs/args_{args.runV}.yaml"
+    if Path(save_fp).exists():
         if args.verbose: print(f"Loading ARGUMENT PARSER | {save_fp}")
-        with open(save_fp, "r") as f: args = dict_to_namespace(yaml.safe_load(f))
-        #with open(save_fp, "r") as f: args = dict_to_namespace(json.load(f))
-        #args = argparse.Namespace(args)
+        with open(Path(save_fp), "r") as f: args = dict_to_namespace(yaml.safe_load(f))
     else:
 
     # ============================================================================================
 
         # Directory Arguments
+        parser.add_argument('--args_fp', type = str, default = save_fp)
         parser.add_argument('--script_fp', type = str,
                             default = f"{args.base_fp}/{args.model}")
         parser.add_argument('--logs_fp', type = str,
@@ -73,7 +71,8 @@ def run_parser(
         # Result Logging Arguments 
         parser.add_argument('--num_gpu', type = int, default = 1)
         parser.add_argument('--save_interval', type = int, default = 500)
-        parser.add_argument('--log_interval', type = int, default = 1)
+        parser.add_argument('--loss_interval', type = int, default = 1)
+        parser.add_argument('--log_interval', type = int, default = 100)
         parser.add_argument('--save_img', type = int, default = 2)
         parser.add_argument('--log_method', type = str,
                             choices = {'wandb', 'tensorboard', None},
@@ -97,19 +96,19 @@ def run_parser(
 
         # VQGAN Architecture Arguments | Block Info
         parser.add_argument('--vqgan.i3d_feat', type = bool, default = False)
-        parser.add_argument('--vqgan.restart_thres', type = float, default = 1.0)
-        parser.add_argument('--vqgan.rand_restart', type = bool, default = False)
+        parser.add_argument('--vqgan.restart_thres', type = float, default = 0.1)
+        parser.add_argument('--vqgan.rand_restart', type = bool, default = True)
         parser.add_argument('--vqgan.norm_type', type = str, default = 'group')
         parser.add_argument('--vqgan.pad_type', type = str, default = 'replicate')
-        parser.add_argument('--vqgan.num_groups', type = int, default = 32)
+        parser.add_argument('--vqgan.num_groups', type = int, default = 8)
 
         # --------------------------------------------------------------------------------------------
 
         # VQGAN Architecture Arguments | Arch Basics
-        parser.add_argument('--vqgan.dim_latent', type = int, default = 256)
-        parser.add_argument('--vqgan.num_codes', type = int, default = 2048)
-        parser.add_argument('--vqgan.num_hidden', type = int, default = 240)
-        parser.add_argument('--vqgan.downsample', type = list, default = [4, 4, 4])
+        parser.add_argument('--vqgan.dim_latent', type = int, default = 32)
+        parser.add_argument('--vqgan.num_codes', type = int, default = 8192)
+        parser.add_argument('--vqgan.num_hidden', type = int, default = 64)
+        parser.add_argument('--vqgan.downsample', type = list, default = [2, 2, 2])
         parser.add_argument('--vqgan.grad_clip', type = float, default = 1.0)
         parser.add_argument('--vqgan.grad_accum', type = int, default = 1)
 
@@ -118,7 +117,8 @@ def run_parser(
         parser.add_argument('--vqgan.lr_decay', type = float, default = 0.999)
         parser.add_argument('--vqgan.lr_step', type = int, default = 250)
         parser.add_argument('--vqgan.lr_min', type = float, default = 1e-6)
-    
+        parser.add_argument('--vqgan.opt_altern', type = int, default = 5)
+
         # --------------------------------------------------------------------------------------------
 
         # VQGAN Architecture Arguments | Discriminator
@@ -133,22 +133,50 @@ def run_parser(
         parser.add_argument('--vqgan.img_weight', type = float, default = 1.0)
         parser.add_argument('--vqgan.vid_weight', type = float, default = 1.0)
         parser.add_argument('--vqgan.l1_weight', type = float, default = 4.0)
-        parser.add_argument('--vqgan.ganfeat_weight', type = float, default = 1.0)
+        parser.add_argument('--vqgan.ganfeat_weight', type = float, default = 2.0)
         parser.add_argument('--vqgan.percept_weight', type = float, default = 0.0)
+        args = parser.parse_args("")
+    
+        # ============================================================================================
+
+        # DDPM Architecture Arguments | Run Basics
+        parser.add_argument('--ddpm.resume', type = bool, default = False)
+        parser.add_argument('--ddpm.resume_ckpt', type = str,
+            default = f"{args.base_fp}/{args.model}/logs/run_{args.runV}/ddpm/latest.ckpt")
+        parser.add_argument('--ddpm.num_step', type = int, default = 100000)
+        parser.add_argument('--ddpm.num_ts', type = int, default = 500)
+        parser.add_argument('--ddpm.num_epoch', type = int, default = -1)
+
+        # DDPM Architecture Arguments | Arch Basics
+        parser.add_argument('--ddpm.img_size', type = int, default = 64)        # data_args.img_size / downsample[-1]
+        parser.add_argument('--ddpm.num_channel', type = int, default = args.vqgan.dim_latent) 
+        parser.add_argument('--ddpm.dim_mult', type = list, default = [1, 2, 4, 8])
+        parser.add_argument('--ddpm.depth_size', type = int, default = 8)       # num_slice / downsample[0]
+
+        # --------------------------------------------------------------------------------------------
+
+        # DDPM Architecture Arguments | Gradient Stuff
+        parser.add_argument('--ddpm.amp', type = bool, default = False)
+        parser.add_argument('--ddpm.grad_accum', type = int, default = 2)
+        parser.add_argument('--ddpm.grad_maxnorm', type = bool, default = None)
+
+        # DDPM Architecture Arguments | EMA
+        parser.add_argument('--ddpm.ema_update', type = int, default = 10)
+        parser.add_argument('--ddpm.ema_start', type = int, default = 2000)
+        parser.add_argument('--ddpm.ema_decay', type = float, default = 0.995)
+
+        # DDPM Architecture Arguments | Learning Rate
+        parser.add_argument('--ddpm.lr_base', type = float, default = 1e-4)
+        parser.add_argument('--ddpm.lr_decay', type = float, default = 0.999)
+        parser.add_argument('--ddpm.lr_step', type = int, default = 250)
+        parser.add_argument('--ddpm.lr_min', type = float, default = 1e-6)
 
         # ============================================================================================
 
-        """
-        # Training & Diffusion Arguments
-        parser.add_argument('--noise_type', type = str, default = 'gaussian')
-        parser.add_argument('--num_epochs', type = int, default = 30)
-        parser.add_argument('--num_ts', type = int, default = 500)
-        parser.add_argument('--num_steps', type = int, default = 150000)
-        parser.add_argument('--lr_base', type = float, default = 1e-4)
-        parser.add_argument('--lr_decay', type = float, default = 0.999)
-        parser.add_argument('--lr_step', type = float, default = 250)
-        parser.add_argument('--lr_min', type = float, default = 1e-6)
-        """
+        # Inference Parameters
+        parser.add_argument('--infer.num_sample', type = int, default = 500)
+        parser.add_argument('--infer.infer_fp', type = str,
+                            default = f"{args.base_fp}/{args.model}/logs/run_{args.runV}/infer")
 
         # ============================================================================================
 
@@ -156,11 +184,10 @@ def run_parser(
         args = parser.parse_args("")
         if save:
             if args.verbose: print(f"Saving ARGUMENT PARSER | {save_fp}")
-            if not save_fp.parent.exists(): os.makedirs(save_fp.parent)
-            #with open(save_fp, "w") as f: json.dump(nest_args(vars(args)), f)
-            with open(save_fp, "w") as f: yaml.safe_dump(nest_args(vars(args)), f)
+            if not Path(save_fp).parent.exists(): os.makedirs(Path(save_fp).parent)
+            with open(Path(save_fp), "w") as f:
+                yaml.safe_dump(nest_args(vars(args)), f, sort_keys = False)
     args.device = torch.device('cuda:0' if torch.cuda.is_available() else "cpu")
     return args
 
 # ============================================================================================
-

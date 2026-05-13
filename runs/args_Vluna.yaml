@@ -1,0 +1,75 @@
+model: meddiff
+runV: Vluna
+verbose: false
+base_fp: /nas-ctm01/homes/pfsousa
+args_fp: /nas-ctm01/homes/pfsousa/meddiff/runs/args_Vluna.yaml
+script_fp: /nas-ctm01/homes/pfsousa/meddiff
+logs_fp: /nas-ctm01/homes/pfsousa/meddiff/logs/run_Vluna
+num_gpu: 1
+save_interval: 100
+loss_interval: 1
+log_interval: 100
+save_img: 4
+log_method: wandb
+seed: 1234
+vqgan:
+  resume: false
+  resume_ckpt: /nas-ctm01/homes/pfsousa/meddiff/logs/run_Vluna/vqgan/lightning_logs/version_29705/checkpoints/epoch=99-step=9000.ckpt
+  num_steps: -1
+  num_epochs: 150
+  i3d_feat: false
+  restart_thres: 0.1
+  rand_restart: true
+  norm_type: group
+  pad_type: replicate
+  num_groups: 8
+  dim_latent: 8
+  num_codes: 8192
+  num_hidden: 64
+  downsample:
+  - 4
+  - 4
+  - 4
+  grad_clip: 1.0
+  grad_accum: 1
+  lr_base: 0.0003
+  lr_decay: 0.999
+  lr_step: 250
+  lr_min: 1.0e-06
+  opt_altern: 5
+  disc_channel: 64
+  disc_layer: 3
+  disc_start: 10000
+  disc_loss: hinge
+  img_weight: 1.0
+  vid_weight: 1.0
+  l1_weight: 4.0
+  ganfeat_weight: 2.0
+  percept_weight: 0.0
+ddpm:
+  resume: false
+  resume_ckpt: /nas-ctm01/homes/pfsousa/meddiff/logs/run_Vluna/ddpm/latest_ckpt.pt
+  num_step: 100000
+  num_ts: 500
+  num_epoch: -1
+  img_size: 8
+  num_channel: 8
+  dim_mult:
+  - 1
+  - 2
+  - 4
+  - 8
+  depth_size: 8
+  amp: false
+  grad_accum: 2
+  grad_maxnorm: null
+  ema_update: 10
+  ema_start: 2000
+  ema_decay: 0.995
+  lr_base: 0.0001
+  lr_decay: 0.999
+  lr_step: 250
+  lr_min: 1.0e-06
+infer:
+  num_sample: 4500
+  infer_fp: /nas-ctm01/datasets/public/medical_datasets/lung_ct_datasets/luna25_challenge/data_staging_area_II/protocol_1/data_npy_files/gen_nodule

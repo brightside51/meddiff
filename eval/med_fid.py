@@ -26,7 +26,6 @@ class InceptionV3_FeatureExtractor(torch.nn.Module):
         feats = feats.double()
         return feats
 
-
 class RadImageNet_FeatureExtractor(torch.nn.Module):
     def __init__(self, device):
         super().__init__()

@@ -1,0 +1,72 @@
+model: meddiff
+runV: VI
+verbose: true
+base_fp: /nas-ctm01/homes/pfsousa
+args_fp: /nas-ctm01/homes/pfsousa/meddiff/runs/args_VI.yaml
+script_fp: /nas-ctm01/homes/pfsousa/meddiff
+logs_fp: /nas-ctm01/homes/pfsousa/meddiff/logs/run_VI
+num_gpu: 1
+save_interval: 1
+loss_interval: 1
+log_interval: 1
+save_img: 2
+log_method: wandb
+seed: 1234
+vqgan:
+  resume: false
+  resume_ckpt: /nas-ctm01/homes/pfsousa/meddiff/logs/run_VI/vqgan/latest.ckpt
+  num_steps: 10
+  num_epochs: -1
+  i3d_feat: false
+  restart_thres: 0.1
+  rand_restart: true
+  norm_type: group
+  pad_type: replicate
+  num_groups: 8
+  dim_latent: 8
+  num_codes: 8192
+  num_hidden: 64
+  downsample:
+  - 2
+  - 4
+  - 4
+  grad_clip: 1.0
+  grad_accum: 1
+  lr_base: 0.0003
+  lr_decay: 0.999
+  lr_step: 250
+  lr_min: 1.0e-06
+  opt_altern: 5
+  disc_channel: 64
+  disc_layer: 3
+  disc_start: 50000
+  disc_loss: hinge
+  img_weight: 1.0
+  vid_weight: 1.0
+  l1_weight: 4.0
+  ganfeat_weight: 2.0
+  percept_weight: 0.0
+ddpm:
+  resume: false
+  resume_ckpt: /nas-ctm01/homes/pfsousa/meddiff/logs/run_VI/ddpm/latest.ckpt
+  num_step: 100000
+  num_ts: 500
+  num_epoch: -1
+  img_size: 32
+  num_channel: 8
+  dim_mult:
+  - 1
+  - 2
+  - 4
+  - 8
+  depth_size: 16
+  amp: false
+  grad_accum: 2
+  grad_maxnorm: null
+  ema_update: 10
+  ema_start: 2000
+  ema_decay: 0.995
+  lr_base: 0.0001
+  lr_decay: 0.999
+  lr_step: 250
+  lr_min: 1.0e-06

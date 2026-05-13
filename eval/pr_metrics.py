@@ -4,6 +4,52 @@ from torchmetrics.image.psnr import PeakSignalNoiseRatio
 
 from tqdm.auto import tqdm
 
+class InceptionV3_FeatureExtractor(torch.nn.Module):
+    def __init__(self, device):
+        super().__init__()
+        self.model: torch.nn.Module = NoTrainInceptionV3(
+            name="inception-v3-compat",
+            features_list=[str(2048)],
+            feature_extractor_weights_path=None,
+        ).to(device)
+        self.device = device
+    
+    @torch.no_grad()
+    def forward(self, imgs: torch.Tensor):
+        if imgs.shape[1] == 1:
+            imgs = imgs.repeat(1, 3, 1, 1)
+        imgs = (imgs * 255).byte()
+        feats = self.model(imgs)
+        feats = feats.double()
+        return feats
+
+class RadImageNet_FeatureExtractor(torch.nn.Module):
+    def __init__(self, device):
+        super().__init__()
+        self.model: torch.nn.Module = RadImageNetPerceptualSimilarity().model.to(device)
+        self.device = device
+
+    def _subtract_mean(self, x: torch.Tensor) -> torch.Tensor:
+        mean = [0.406, 0.456, 0.485]
+        x[:, 0, :, :] -= mean[0]
+        x[:, 1, :, :] -= mean[1]
+        x[:, 2, :, :] -= mean[2]
+        return x
+
+    def _normalize_tensor(self, x: torch.Tensor, eps: float = 1e-10) -> torch.Tensor:
+        norm_factor = torch.sqrt(torch.sum(x**2, dim=1, keepdim=True))
+        return x / (norm_factor + eps)
+    
+    @torch.no_grad()
+    def forward(self, imgs: torch.Tensor):
+        if imgs.shape[1] == 1:
+            imgs = imgs.repeat(1, 3, 1, 1)
+        imgs = self._subtract_mean(imgs)
+        feats = self.model.forward(imgs)
+        feats = self._normalize_tensor(feats).mean(dim=(2,3)).double()
+        return feats
+
+
 class PrecisionRecall:
     """
     Implementation of the pseudocode in https://arxiv.org/pdf/1904.06991

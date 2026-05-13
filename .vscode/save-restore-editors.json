@@ -1,7 +1,7 @@
 {
   "tabs": [
     {
-      "name": "V0 (05/03/2026)",
+      "name": "V0 VQGAN (05/03/2026)",
       "tabGroups": [
         {
           "files": [
@@ -29,6 +29,264 @@
           },
           {
             "size": 547
+          }
+        ]
+      }
+    },
+    {
+      "name": "DDPM (08/03/2026)",
+      "tabGroups": [
+        {
+          "files": [
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/ddpm/diffusion.py",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/train/train_ddpm.py",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/run_parser.py",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/runs/main_V0.py"
+          ],
+          "viewColumn": 1
+        },
+        {
+          "files": [
+            "file:///d%3A/MedDiff/ddpm/diffusion.py",
+            "file:///d%3A/MedDiff/train/train_ddpm.py",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/logs/run_V0/output.out",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/logs/run_V0/error.err",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/runs/run_V0.sh"
+          ],
+          "viewColumn": 2
+        }
+      ],
+      "layout": {
+        "orientation": 0,
+        "groups": [
+          {
+            "size": 616
+          },
+          {
+            "size": 616
+          }
+        ]
+      }
+    },
+    {
+      "name": "V0 DDPM (08/03/2026)",
+      "tabGroups": [
+        {
+          "files": [
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/ddpm/diffusion.py",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/train/train_ddpm.py",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/runs/main_V0.py",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/train/train_vqgan.py"
+          ],
+          "viewColumn": 1
+        },
+        {
+          "files": [
+            "file:///d%3A/MedDiff/ddpm/diffusion.py",
+            "file:///d%3A/MedDiff/train/train_ddpm.py",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/logs/run_V0/output.out",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/logs/run_V0/error.err",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/runs/run_V0.sh"
+          ],
+          "viewColumn": 2
+        }
+      ],
+      "layout": {
+        "orientation": 0,
+        "groups": [
+          {
+            "size": 616
+          },
+          {
+            "size": 616
+          }
+        ]
+      }
+    },
+    {
+      "name": "V0 VQGAN (20/04/2026)",
+      "tabGroups": [
+        {
+          "files": [
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/runs/run_V0.sh",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/logs/run_V0/error.err",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/logs/run_V0/output.out",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/runs/args_V0.yaml",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/run_parser.py"
+          ],
+          "viewColumn": 1
+        },
+        {
+          "files": [
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/runs/main_V0.py",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/eval/ssim.py",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/train/train_vqgan.py",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/vqgan/vqgan.py"
+          ],
+          "viewColumn": 2
+        }
+      ],
+      "layout": {
+        "orientation": 0,
+        "groups": [
+          {
+            "size": 936
+          },
+          {
+            "size": 936
+          }
+        ]
+      }
+    },
+    {
+      "name": "VQGAN VI (21/04/2026)",
+      "tabGroups": [
+        {
+          "files": [
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/train/train_ddpm.py",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/ddpm/diffusion.py",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/vqgan/vqgan.py",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/runs/args_VI.yaml"
+          ],
+          "viewColumn": 1
+        },
+        {
+          "files": [
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/runs/run_VI.sh",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/runs/main_VI.py",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/run_parser.py",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/train/train_vqgan.py",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/logs/run_VI/error.err",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/logs/run_VI/output.out"
+          ],
+          "viewColumn": 2
+        }
+      ],
+      "layout": {
+        "orientation": 0,
+        "groups": [
+          {
+            "size": 616
+          },
+          {
+            "size": 616
+          }
+        ]
+      }
+    },
+    {
+      "name": "VQGAN V0 (22/04/2026)",
+      "tabGroups": [
+        {
+          "files": [
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/vqgan/vqgan.py",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/runs/args_V0.yaml",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/runs/main_V0.py"
+          ],
+          "viewColumn": 1
+        },
+        {
+          "files": [
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/runs/run_V0.sh",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/run_parser.py",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/train/train_vqgan.py"
+          ],
+          "viewColumn": 2
+        }
+      ],
+      "layout": {
+        "orientation": 0,
+        "groups": [
+          {
+            "size": 616
+          },
+          {
+            "size": 616
+          }
+        ]
+      }
+    },
+    {
+      "name": "V0 VQGAN (27/04/2026)",
+      "tabGroups": [
+        {
+          "files": [
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/vqgan/vqgan.py",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/train/train_vqgan.py",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/runs/main_V0.py",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/runs/args_V0.yaml",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/runs/run_V0.sh"
+          ],
+          "viewColumn": 1
+        },
+        {
+          "files": [
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/run_parser.py",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/logs/run_V0/error.err",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/logs/run_V0/output.out",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/train/train_vqgan.py"
+          ],
+          "viewColumn": 2
+        }
+      ],
+      "layout": {
+        "orientation": 0,
+        "groups": [
+          {
+            "size": 936
+          },
+          {
+            "size": 936
+          }
+        ]
+      }
+    },
+    {
+      "name": "Vluna (06/05/2026)",
+      "tabGroups": [
+        {
+          "files": [
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/train/infer_ddpm.py",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/runs/run_Vluna.sh",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/logs/run_Vluna/output.out",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/logs/run_Vluna/error.err"
+          ],
+          "viewColumn": 1
+        },
+        {
+          "files": [
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/eval/frd_score/src/frd_score/frd.py",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/run_parser.py",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/runs/args_Vluna.yaml",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/runs/main_Vluna.py",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/meddiff/train/train_ddpm.py"
+          ],
+          "viewColumn": 2
+        },
+        {
+          "files": [
+            "file:///x%3A/nas-ctm01/homes/pfsousa/data/luna25_nodule/VI_args.yaml"
+          ],
+          "viewColumn": 3
+        },
+        {
+          "files": [
+            "file:///x%3A/nas-ctm01/homes/pfsousa/seg_piu/main_VI.py",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/seg_piu/run_VI.sh",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/seg_piu/output.out",
+            "file:///x%3A/nas-ctm01/homes/pfsousa/seg_piu/error.err"
+          ],
+          "viewColumn": 4
+        }
+      ],
+      "layout": {
+        "orientation": 0,
+        "groups": [
+          {
+            "size": 913
+          },
+          {
+            "size": 959
           }
         ]
       }

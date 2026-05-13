@@ -1,45 +1,71 @@
-base_fp: /nas-ctm01/homes/pfsousa
-log_interval: 1
-log_method: wandb
-logs_fp: /nas-ctm01/homes/pfsousa/meddiff/logs/run_V0
 model: meddiff
-num_gpu: 1
 runV: V0
-save_img: 2
-save_interval: 500
+verbose: false
+base_fp: /nas-ctm01/homes/pfsousa
+args_fp: /nas-ctm01/homes/pfsousa/meddiff/runs/args_V0.yaml
 script_fp: /nas-ctm01/homes/pfsousa/meddiff
+logs_fp: /nas-ctm01/homes/pfsousa/meddiff/logs/run_V0
+num_gpu: 1
+save_interval: 100
+loss_interval: 1
+log_interval: 100
+save_img: 4
+log_method: wandb
 seed: 1234
-verbose: true
 vqgan:
-  dim_latent: 32
-  disc_channel: 64
-  disc_layer: 3
-  disc_loss: hinge
-  disc_start: 80000
+  resume: false
+  resume_ckpt: /nas-ctm01/homes/pfsousa/meddiff/logs/run_V0/vqgan/lightning_logs/version_30035/checkpoints/latest_checkpoint.ckpt
+  num_steps: -1
+  num_epochs: 150
+  i3d_feat: false
+  restart_thres: 0.1
+  rand_restart: true
+  norm_type: group
+  pad_type: replicate
+  num_groups: 8
+  dim_latent: 16
+  num_codes: 16384
+  num_hidden: 16
   downsample:
   - 2
-  - 2
-  - 2
-  ganfeat_weight: 2.0
-  grad_accum: 1
+  - 4
+  - 4
   grad_clip: 1.0
-  i3d_feat: false
-  img_weight: 1.0
-  l1_weight: 10.0
-  lr_base: 0.0001
-  lr_decay: 0.995
+  grad_accum: 1
+  lr_base: 0.0003
+  lr_decay: 0.999
+  lr_step: 250
   lr_min: 1.0e-06
-  lr_step: 1000
-  norm_type: group
-  num_codes: 8192
-  num_epochs: -1
-  num_groups: 8
-  num_hidden: 64
-  num_steps: -1
-  pad_type: replicate
-  percept_weight: 0.0
-  rand_restart: true
-  restart_thres: 0.1
-  resume: false
-  resume_ckpt: /nas-ctm01/homes/pfsousa/meddiff/logs/run_V0/vqgan/latest.ckpt
+  opt_altern: 5
+  disc_channel: 64
+  disc_layer: 3
+  disc_start: 10000
+  disc_loss: hinge
+  img_weight: 1.0
   vid_weight: 1.0
+  l1_weight: 4.0
+  ganfeat_weight: 2.0
+  percept_weight: 4.0
+ddpm:
+  resume: false
+  resume_ckpt: /nas-ctm01/homes/pfsousa/meddiff/logs/run_V0/ddpm/latest_ckpt.pt
+  num_step: 100000
+  num_ts: 500
+  num_epoch: -1
+  img_size: 32
+  num_channel: 16
+  dim_mult:
+  - 1
+  - 2
+  - 4
+  depth_size: 16
+  amp: false
+  grad_accum: 2
+  grad_maxnorm: null
+  ema_update: 10
+  ema_start: 2000
+  ema_decay: 0.995
+  lr_base: 0.0001
+  lr_decay: 0.999
+  lr_step: 250
+  lr_min: 1.0e-06

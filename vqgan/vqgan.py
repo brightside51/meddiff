@@ -11,10 +11,17 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.distributed as dist
 import pytorch_lightning as pl
+import random
+import wandb
+import imageio
 
 # --------------------------------------------------------------------------------------------
 
-# Functionality Import | Fundamentals
+# Functionality Import
+sys.path.append('/nas-ctm01/homes/pfsousa/meddiff/eval')
+#from med_fid import RadImageNet_FeatureExtractor as MedicalFID
+#from ssim import ssim_3d, msssim_3d.
+from ssim3d import ssim, ms_ssim
 from utils import shift_dim, adopt_weight, comp_getattr
 from lpips import LPIPS
 from codebook import Codebook
@@ -340,12 +347,13 @@ class Decoder(nn.Module):
         num_upsample = np.array([int(math.log2(u)) for u in upsample])
         self.block_list = nn.ModuleList(); in_channel = num_hidden * 2 ** num_upsample.max()
         self.layer_in = nn.Sequential(Normalise(in_channel, norm_type, num_groups), nn.SiLU())
+        max_upsample = int(num_upsample.max())
 
         # Decoder Architecture | Upsampling Blocks
-        for i in range(num_upsample.max()):
+        for i in range(max_upsample):
             block = nn.Module()
-            in_channel = in_channel if i == 0 else num_hidden * 2 ** (num_upsample.max() - i + 1)
-            out_channel = num_hidden * 2 ** (num_upsample.max() - i)
+            in_channel = in_channel if i == 0 else num_hidden * 2 ** (max_upsample - i + 1)
+            out_channel = num_hidden * 2 ** (max_upsample - i)
             stride = tuple([2 if u > 0 else 1 for u in num_upsample])
             block.up = SamePadConvTranspose3d(  in_channel, out_channel, 4, stride = stride)
             block.res1 = ResBlock(  out_channel, out_channel,
@@ -382,7 +390,7 @@ class VQGAN(pl.LightningModule):
         self,
         data_args,
         run_args,
-        run_logger = None
+        run_logger
     ):
         super().__init__()
         self.save_hyperparameters({
@@ -437,6 +445,7 @@ class VQGAN(pl.LightningModule):
                                                 self.run_args.vqgan.disc_channel,
                                                 self.run_args.vqgan.disc_layer,
                                                 norm_layer = nn.BatchNorm3d)
+        #self.ssim_metric = SSIM(); self.msssim_metric = MSSSIM()
 
         # Loss Function Initialisation
         if self.run_args.vqgan.disc_loss == 'vanilla': self.disc_loss = vanilla_d_loss
@@ -478,7 +487,7 @@ class VQGAN(pl.LightningModule):
     # ============================================================================================
 
     # Forward Pass
-    def forward(self, x, optimiser_idx = None):
+    def forward(self, x, optimiser_idx = None, log_only: bool = False):
         
         # Forward Pass
         B, C, T, H, W = x.shape
@@ -489,10 +498,11 @@ class VQGAN(pl.LightningModule):
 
         # Loss Calculation | Reconstruction Loss
         recon_loss = F.l1_loss(x_recon, x) * self.run_args.vqgan.l1_weight
-        frame_idx = torch.randint(0, T, [B]).cuda()
+        frame_idx = torch.randint(0, T, [B], dtype = torch.long).to(x.device)
         frame_idx = frame_idx.reshape(-1, 1, 1, 1, 1).repeat(1, C, 1, H, W)
         slice_real = torch.gather(x, 2, frame_idx).squeeze(2)
         slice_recon = torch.gather(x_recon, 2, frame_idx).squeeze(2)
+        if log_only: return slice_real, slice_recon, x, x_recon
 
         # --------------------------------------------------------------------------------------------
 
@@ -500,19 +510,19 @@ class VQGAN(pl.LightningModule):
         if optimiser_idx == 0:
 
             # Loss Calculation | SSIM Indexes
-            ssim_loss = SSIM(x_recon, x)
-            msssim_loss = MS_SSIM(x_recon, x)
+            ssim_loss = ssim(x_recon, x)
+            #msssim_loss = ms_ssim(x_recon, x, win_size = 1)
 
             # Loss Calculation | Perceptual LPIPS
             percept_loss = 0
             if self.run_args.vqgan.percept_weight > 0:
-                percept_loss = self.percept_model (slice_real, slice_recon).mean() * self.run_args.vqgan.percept_weight
+                percept_loss = self.percept_model (slice_real, slice_recon).mean()
 
             # Loss Calculation | CMMD
 
-            # Loss Calculation | Precision & Rec
+            # Loss Calculation | Precision & Recall
 
-            # Loss Calculation | Medical FID
+            # Loss Calculation | FID & FRD
 
             # Loss Calculation | Discriminator Loss
             logits_img_fake, pred_img_fake = self.img_disc(slice_recon)
@@ -537,19 +547,34 @@ class VQGAN(pl.LightningModule):
 
             # Value Logging | WandB
             if self.run_args.log_method == 'wandb' and self.run_logger is not None:
-                self.run_logger.log({   "train/vqgan/gen/step": self.global_step,
-                                        "train/vqgan/gen/recon_loss": recon_loss.item(),
-                                        "train/vqgan/gen/ssim_loss": ssim_loss.item(),
-                                        "train/vqgan/gen/msssim_loss": msssim_loss.item(),
-                                        "train/vqgan/gen/percept_loss": percept_loss.item(),
-                                        "train/vqgan/gen/gen_loss": gen_loss.item(),
-                                        "train/vqgan/gen/ganfeat_loss": ganfeat_loss.item(),
-                                        "train/vqgan/gen/ae_loss": ae_loss.item()})
+                if self.global_step % self.run_args.loss_interval == 0:
+                    self.run_logger.log({   "vqgan_gen/step": self.global_step,
+                                            "vqgan_gen/recon_loss": recon_loss.item(),
+                                            "vqgan_gen/ssim_loss": ssim_loss.item(),
+                                            #"vqgan_gen/msssim_loss": msssim_loss.item(),
+                                            "vqgan_gen/percept_loss": percept_loss,
+                                            "vqgan_gen/loss": gen_loss.item(),
+                                            "vqgan_gen/ganfeat_loss": ganfeat_loss.item(),
+                                            "vqgan_gen/ae_loss": ae_loss.item()})
+                if self.global_step % self.run_args.log_interval == 0:
+                    imageio.mimsave(f"{self.run_args.logs_fp}/vqgan/recon_step={self.global_step}.gif",
+                                    list((x_recon[0, 0].detach().cpu().numpy() * 255.0).astype(np.uint8)),
+                                    duration = 1000 / self.data_args.num_fps, loop = 0)
+                    imageio.mimsave(f"{self.run_args.logs_fp}/vqgan/real_step={self.global_step}.gif",
+                                    list((x[0, 0].detach().cpu().numpy() * 255.0).astype(np.uint8)),
+                                    duration = 1000 / self.data_args.num_fps, loop = 0)
+                    """
+                    self.run_logger.log({   "vqgan_gen/step": self.global_step,
+                                            "vqgan_gen/x": wandb.Video(x.detach().cpu().numpy(),
+                                                format = "gif", fps = self.data_args.num_fps),
+                                            "vqgan_gen/x_recon": wandb.Video(x_recon.detach().cpu().numpy(),
+                                                format = "gif", fps = self.data_args.num_fps)})
+                    """
 
             # Value Logging | Tensorboard
             #else:
                 
-            return recon_loss, x_recon, vq_out, ae_loss, percept_loss, ganfeat_loss
+            return recon_loss, x_recon, vq_out, ae_loss, percept_loss * self.run_args.vqgan.percept_weight, ganfeat_loss
                 
         # --------------------------------------------------------------------------------------------
 
@@ -563,7 +588,6 @@ class VQGAN(pl.LightningModule):
             logits_vid_fake, pred_vid_fake = self.vid_disc(x_recon.detach())
             del pred_img_real, pred_vid_real, pred_img_fake, pred_vid_fake
 
-            # 
             disc_img_loss = self.disc_loss(logits_img_real, logits_img_fake)
             disc_vid_loss = self.disc_loss(logits_vid_real, logits_vid_fake)
             disc_factor = adopt_weight(self.global_step, threshold = self.run_args.vqgan.disc_start)
@@ -571,22 +595,21 @@ class VQGAN(pl.LightningModule):
                                         (disc_vid_loss * self.run_args.vqgan.vid_weight))
 
             # Value Logging | WandB
-            if self.run_args.log_method == 'wandb' and self.run_logger is not None:
-                self.run_logger.log({   "train/vqgan/disc/step": self.global_step,
-                                        "train/vqgan/disc/logits_img_real": logits_img_real.mean().detach().item(),
-                                        "train/vqgan/disc/logits_vid_real": logits_vid_real.mean().detach().item(),
-                                        "train/vqgan/disc/logits_img_fake": logits_img_fake.mean().detach().item(),
-                                        "train/vqgan/disc/logits_vid_fake": logits_vid_fake.mean().detach().item(),
-                                        "train/vqgan/disc/disc_img_loss": disc_img_loss.item(),
-                                        "train/vqgan/disc/disc_vid_loss": disc_vid_loss.item(),
-                                        "train/vqgan/disc/disc_loss": disc_loss.item(),
-                                        "train/vqgan/disc/disc_loss": disc_loss.item()})
+            if self.run_args.log_method == 'wandb' and self.run_logger is not None and self.global_step % self.run_args.loss_interval == 0:
+                self.run_logger.log({   "vqgan_disc/step": self.global_step,
+                                        "vqgan_disc/logits_img_real": logits_img_real.mean().detach().item(),
+                                        "vqgan_disc/logits_vid_real": logits_vid_real.mean().detach().item(),
+                                        "vqgan_disc/logits_img_fake": logits_img_fake.mean().detach().item(),
+                                        "vqgan_disc/logits_vid_fake": logits_vid_fake.mean().detach().item(),
+                                        "vqgan_disc/img_loss": disc_img_loss.item(),
+                                        "vqgan_disc/vid_loss": disc_vid_loss.item(),
+                                        "vqgan_disc/loss": disc_loss.item(),
+                                        "vqgan_disc/loss": disc_loss.item()})
 
             # Value Logging | Tensorboard
             #else:
 
             return disc_loss
-
         percept_loss = self.percept_model (slice_real, slice_recon) * self.run_args.vqgan.percept_weight
         return recon_loss, x_recon, vq_out, percept_loss
 
@@ -596,28 +619,42 @@ class VQGAN(pl.LightningModule):
     def training_step(self, batch, batch_idx):
 
         # Data Extraction
-        print(self.device)
-        x = batch.to(self.device)
+        x = batch.to(self.run_args.device)
         gen_opt, disc_opt = self.optimizers()
+
+        if self.global_step != 0 and self.global_step % self.run_args.vqgan.opt_altern == 0:
+            self.optimizer_idx = 1 - self.optimizer_idx
+            if self.run_args.verbose:
+                print(f"VQGAN | Training Step: {self.global_step} | Optimiser Index: {self.optimizer_idx}")
 
         # Generator Training
         if self.optimizer_idx == 0:
             recon_loss, x_recon, vq_out, ae_loss, percept_loss, ganfeat_loss = self.forward(x, optimiser_idx = 0)
             commit_loss = vq_out['commitment_loss']
             loss = recon_loss + commit_loss + ae_loss + percept_loss + ganfeat_loss
-            gen_opt.zero_grad(); self.manual_backward(loss); gen_opt.step()
+            gen_opt.zero_grad(); self.manual_backward(loss)
+            torch.nn.utils.clip_grad_norm_(self.encoder.parameters(), max_norm = self.run_args.vqgan.grad_clip)
+            torch.nn.utils.clip_grad_norm_(self.decoder.parameters(), max_norm = self.run_args.vqgan.grad_clip)
+            torch.nn.utils.clip_grad_norm_(self.pre_conv.parameters(), max_norm = self.run_args.vqgan.grad_clip)
+            torch.nn.utils.clip_grad_norm_(self.post_conv.parameters(), max_norm = self.run_args.vqgan.grad_clip)
+            torch.nn.utils.clip_grad_norm_(self.codebook.parameters(), max_norm = self.run_args.vqgan.grad_clip)
+            gen_opt.step()
 
             # Value Logging | WandB
-            if self.run_args.log_method == 'wandb' and self.run_logger is not None:
-                self.run_logger.log({   "train/vqgan/step": self.global_step,
-                                        "train/vqgan/gen/commit_loss": commit_loss.item(),
-                                        "train/vqgan/gen/loss": loss.item()})
+            if self.run_args.log_method == 'wandb' and self.run_logger is not None and self.global_step % self.run_args.loss_interval == 0:
+                self.run_logger.log({   "vqgan_gen/step": self.global_step,
+                                        "vqgan_gen/commit_loss": commit_loss.item(),
+                                        "vqgan_gen/loss": loss.item()})
         
         # Discriminator Training
         if self.optimizer_idx == 1:
             disc_loss = self.forward(x, optimiser_idx = 1)
             loss = disc_loss
-            disc_opt.zero_grad(); self.manual_backward(loss); disc_opt.step()
+            disc_opt.zero_grad(); self.manual_backward(loss)
+            torch.nn.utils.clip_grad_norm_(self.img_disc.parameters(), max_norm = self.run_args.vqgan.grad_clip)
+            torch.nn.utils.clip_grad_norm_(self.vid_disc.parameters(), max_norm = self.run_args.vqgan.grad_clip)
+            disc_opt.step()
+
         return loss
     
     # --------------------------------------------------------------------------------------------
@@ -630,12 +667,13 @@ class VQGAN(pl.LightningModule):
         recon_loss, x_recon, vq_out, percept_loss = self.forward(x)        
 
         # Value Logging | WandB
-        if self.run_args.log_method == 'wandb' and self.run_logger is not None:
-            self.run_logger.log({   "val/vqgan/step": self.global_step,
-                                    "val/vqgan/recon_loss": recon_loss.item(),
-                                    "val/vqgan/percept_loss": percept_loss.item(),
-                                    "val/vqgan/commit_loss": vq_out['commitment_loss'].item(),
-                                    "val/vqgan/perplexity": vq_out['perplexity'].item()})
+        self.log('val/recon_loss', recon_loss, prog_bar=True)
+        if self.run_args.log_method == 'wandb' and self.run_logger is not None and self.global_step % self.run_args.loss_interval == 0:
+            self.run_logger.log({   "vqgan_val/step": self.global_step,
+                                    "vqgan_val/recon_loss": recon_loss.item(),
+                                    "vqgan_val/percept_loss": torch.mean(percept_loss),
+                                    "vqgan_val/commit_loss": vq_out['commitment_loss'].item(),
+                                    "vqgan_val/perplexity": vq_out['perplexity'].item()})
         
         # Value Logging | Tensorboard
         #else:
@@ -657,3 +695,21 @@ class VQGAN(pl.LightningModule):
                                     list(self.vid_disc.parameters()),
                                     lr = lr, betas = (0.5, 0.9))
         return [gen_opt, disc_opt], []
+
+    # Image & Video Logging
+    def log_images(self, batch, **kwargs):
+        log = dict()
+        x = batch
+        x = x.to(self.device)
+        frames, frames_rec, _, _ = self(x, log_only = True)
+        log["inputs"] = frames
+        log["reconstructions"] = frames_rec
+        return log
+
+    def log_videos(self, batch, **kwargs):
+        log = dict()
+        x = batch
+        _, _, x, x_rec = self(x, log_only = True)
+        log["inputs"] = x
+        log["reconstructions"] = x_rec
+        return log

@@ -1,93 +1,77 @@
-from re import I
+# ============================================================================================
+
+# Package Import
 import sys
-sys.path.append('ddpm')
-from diffusion import Unet3D, GaussianDiffusion, Trainer
-from unet import UNet
-#from ddpm import Unet3D, GaussianDiffusion, Trainer
-#sys.path.append('data')
-#from dataset import MRNetDataset, BRATSDataset
-
-import argparse
-import wandb
-import hydra
-from omegaconf import DictConfig, OmegaConf, open_dict
-sys.path.append('train')
-from get_dataset import get_dataset
-import torch
+import numpy as np
+import matplotlib.pyplot as plt
 import os
-#from ddpm.unet import UNet
+import random
+import argparse
+import torch
+import wandb
+import pytorch_lightning as pl
+import hydra
+import torch.distributed as dist
 
+# --------------------------------------------------------------------------------------------
 
-# NCCL_P2P_DISABLE=1 accelerate launch train/train_ddpm.py
+# Functionality Import | Fundamentals
+from pathlib import Path
+from math import *
+from PIL import Image
+from torch.utils.data import Dataset, DataLoader, ConcatDataset, dataset
+from datetime import datetime
+from omegaconf import DictConfig, open_dict
 
-@hydra.main(config_path='../config', config_name='base_cfg', version_base=None)
-def run(cfg: DictConfig):
-    #torch.cuda.set_device(cfg.model.gpus)
-    with open_dict(cfg):
-        cfg.model.results_folder = os.path.join(
-            cfg.model.results_folder, cfg.dataset.name, cfg.model.results_folder_postfix)
+# Functionality Import | Torch
+from torchvision import transforms
+from torch.utils.data.distributed import DistributedSampler
+from torch.nn.parallel import DistributedDataParallel as DDP
+from torch.distributed import init_process_group, destroy_process_group
 
-    if cfg.model.denoising_fn == 'Unet3D':
-        model = Unet3D(
-            dim=cfg.model.diffusion_img_size,
-            dim_mults=cfg.model.dim_mults,
-            channels=cfg.model.diffusion_num_channels,
-        ).cuda()
-    elif cfg.model.denoising_fn == 'UNet':
-        model = UNet(
-            in_ch=cfg.model.diffusion_num_channels,
-            out_ch=cfg.model.diffusion_num_channels,
-            spatial_dims=3
-        ).cuda()
-    else:
-        raise ValueError(f"Model {cfg.model.denoising_fn} doesn't exist")
+# --------------------------------------------------------------------------------------------
 
-    diffusion = GaussianDiffusion(
-        model,
-        vqgan_ckpt=cfg.model.vqgan_ckpt,
-        image_size=cfg.model.diffusion_img_size,
-        num_frames=cfg.model.diffusion_depth_size,
-        channels=cfg.model.diffusion_num_channels,
-        timesteps=cfg.model.timesteps,
-        # sampling_timesteps=cfg.model.sampling_timesteps,
-        loss_type=cfg.model.loss_type,
-        # objective=cfg.objective
-    ).cuda()
+# Functionality Import | Custom
+sys.path.append('/nas-ctm01/homes/pfsousa/data')
+from data_parser import data_parser
+from __init__ import get_ds
+sys.path.append('/nas-ctm01/homes/pfsousa/meddiff')
+from run_parser import run_parser
+sys.path.append('/nas-ctm01/homes/pfsousa/meddiff/ddpm')
+from diffusion import UNet3D, GaussianDiffusion, Trainer
 
-    train_dataset, *_ = get_dataset(cfg)
+# ============================================================================================
 
-    trainer = Trainer(
-        diffusion,
-        cfg=cfg,
-        dataset=train_dataset,
-        train_batch_size=cfg.model.batch_size,
-        save_and_sample_every=cfg.model.save_and_sample_every,
-        train_lr=cfg.model.train_lr,
-        train_num_steps=cfg.model.train_num_steps,
-        gradient_accumulate_every=cfg.model.gradient_accumulate_every,
-        ema_decay=cfg.model.ema_decay,
-        amp=cfg.model.amp,
-        num_sample_rows=cfg.model.num_sample_rows,
-        results_folder=cfg.model.results_folder,
-        num_workers=cfg.model.num_workers,
-        max_grad_norm = None,#1.0,
-        # logger=cfg.model.logger
-    )
+def train_ddpm(
+    data_args = None,
+    run_args = None,
+    run_logger = None
+):
 
-    if cfg.model.load_milestone:
-        #trainer.load(cfg.model.load_milestone)
-        print("Loading milestone")
-        trainer.load(cfg.model.ddpm_ckpt)
+    # Training Dataset Initialisation
+    if type(data_args) == list:
+        train_ds = []
+        for data_arg in data_args:
+            train_ds.append(get_ds(data_arg, mode = 'train'))
+        #data_args_rep = data_args
+        data_args = data_args[0]
+        train_ds = ConcatDataset(train_ds)
+    else: train_ds = get_ds(data_args, mode = 'train')
 
+    # 3D U-Net Backbone Initialisation
+    model = UNet3D(dim = data_args.img_size, dim_mult = run_args.ddpm.dim_mult,
+                    num_channel = run_args.ddpm.num_channel).to(run_args.device)
+
+    # Diffusion Process Initialisation
+    diff = GaussianDiffusion(model,
+        data_args = data_args, run_args = run_args).to(run_args.device)
+    
+    # Diffusion Process Trainer Initialisation
+    trainer = Trainer(diff, train_ds, data_args, run_args, run_logger)
+    if run_args.ddpm.resume: trainer.load(run_args.ddpm.resume_ckpt)
     trainer.train()
 
+# ============================================================================================
 
 if __name__ == '__main__':
-    run()
-
-    # wandb.finish()
-
-    # Incorporate GAN loss in DDPM training?
-    # Incorporate GAN loss in UNET segmentation?
-    # Maybe better if I don't use ema updates?
-    # Use with other vqgan latent space (the one with more channels?)
+    train_ddpm()
