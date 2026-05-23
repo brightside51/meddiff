@@ -14,7 +14,7 @@ log_method: wandb
 seed: 1234
 vqgan:
   resume: false
-  resume_ckpt: /nas-ctm01/homes/pfsousa/meddiff/logs/run_Vluna/vqgan/lightning_logs/version_29705/checkpoints/epoch=99-step=9000.ckpt
+  resume_ckpt: /nas-ctm01/homes/pfsousa/meddiff/logs/run_Vluna/vqgan/lightning_logs/version_34222/checkpoints/epoch=99-step=9000.ckpt
   num_steps: -1
   num_epochs: 150
   i3d_feat: false
@@ -72,4 +72,4 @@ ddpm:
   lr_min: 1.0e-06
 infer:
   num_sample: 4500
-  infer_fp: /nas-ctm01/datasets/public/medical_datasets/lung_ct_datasets/luna25_challenge/data_staging_area_II/protocol_1/data_npy_files/gen_nodule
+  infer_fp: /nas-ctm01/datasets/public/medical_datasets/lung_ct_datasets/luna25_challenge/data_staging_area_II/protocol_1/data_npy_files/gen_nodule_exp1

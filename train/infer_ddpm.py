@@ -50,7 +50,7 @@ from diffusion import UNet3D, GaussianDiffusion, Trainer
 
 # Functionality Import | Evaluation
 sys.path.append('/nas-ctm01/homes/pfsousa/meddiff/eval/frd_score/src/frd_score')
-import frd as frd_score
+#import frd as frd_score
 #from frd_score import compute_frd
 from monai.networks.nets import resnet10
 #sys.path.append('/nas-ctm01/homes/pfsousa/meddiff/eval/cmmd')

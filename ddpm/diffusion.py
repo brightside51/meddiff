@@ -750,6 +750,7 @@ class GaussianDiffusion(nn.Module):
             _sample = (((_sample + 1.0) / 2.0) * (self.vqgan.codebook.embeddings.max() -
                 self.vqgan.codebook.embeddings.min())) + self.vqgan.codebook.embeddings.min()
             _sample = self.vqgan.decode(_sample, quantise = True)
+            _sample = torch.clamp(_sample, 0.0, 1.0)
         else:
             unnormalize_img(_sample)
         return _sample
@@ -956,6 +957,7 @@ class Trainer(object):
                                                 "ddpm/latent/ssim_loss": ssim_loss,
                                                 "ddpm/latent/msssim_loss": msssim_loss,
                                                 })
+                    """
                     if self.step % self.run_args.log_interval == 0:
                         imageio.mimsave(f"{self.run_args.logs_fp}/ddpm/logs/recon_step={self.step}.gif",
                                     list((img_recon[0, 0].detach().cpu().numpy() * 255.0).astype(np.uint8)),
@@ -967,7 +969,7 @@ class Trainer(object):
                                     list((img_start[0, 0].detach().cpu().numpy() * 255.0).astype(np.uint8)),
                                     duration = 1000 / self.data_args.num_fps, loop = 0)
                     
-                        """self.run_logger.log({   "ddpm/step": self.step,
+                        self.run_logger.log({   "ddpm/step": self.step,
                                                 "ddpm/img_start": wandb.Video(img_start.detach().cpu(),
                                                     format = "gif", fps = self.data_args.num_fps),
                                                 "ddpm/img_gt": wandb.Video(data.detach().cpu(),
@@ -975,7 +977,7 @@ class Trainer(object):
                                                 "ddpm/img_recon": wandb.Video(img_recon.detach().cpu(),
                                                     format = "gif", fps = self.data_args.num_fps),
                                                 })
-                        """
+                    """
 
             # Value Logging | WandB
             if self.run_args.log_method == 'wandb' and self.run_logger is not None:

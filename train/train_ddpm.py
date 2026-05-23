@@ -53,7 +53,6 @@ def train_ddpm(
         train_ds = []
         for data_arg in data_args:
             train_ds.append(get_ds(data_arg, mode = 'train'))
-        #data_args_rep = data_args
         data_args = data_args[0]
         train_ds = ConcatDataset(train_ds)
     else: train_ds = get_ds(data_args, mode = 'train')
