@@ -1,28 +1,29 @@
-2026-05-23 17:52:03,765 INFO    MainThread:961892 [wandb_setup.py:_flush():76] Current SDK version is 0.16.6
-2026-05-23 17:52:03,765 INFO    MainThread:961892 [wandb_setup.py:_flush():76] Configure stats pid to 961892
-2026-05-23 17:52:03,765 INFO    MainThread:961892 [wandb_setup.py:_flush():76] Loading settings from /nas-ctm01/homes/pfsousa/.config/wandb/settings
-2026-05-23 17:52:03,765 INFO    MainThread:961892 [wandb_setup.py:_flush():76] Loading settings from /nas-ctm01/homes/pfsousa/meddiff/runs/wandb/settings
-2026-05-23 17:52:03,765 INFO    MainThread:961892 [wandb_setup.py:_flush():76] Loading settings from environment variables: {}
-2026-05-23 17:52:03,765 INFO    MainThread:961892 [wandb_setup.py:_flush():76] Inferring run settings from compute environment: {'program_relpath': 'runs/main_Vluna.py', 'program_abspath': '/nas-ctm01/homes/pfsousa/meddiff/runs/main_Vluna.py', 'program': '/nas-ctm01/homes/pfsousa/meddiff/runs/main_Vluna.py'}
-2026-05-23 17:52:03,765 INFO    MainThread:961892 [wandb_setup.py:_flush():76] Applying login settings: {}
-2026-05-23 17:52:03,765 INFO    MainThread:961892 [wandb_setup.py:_flush():76] Applying login settings: {}
-2026-05-23 17:52:03,765 INFO    MainThread:961892 [wandb_init.py:_log_setup():521] Logging user logs to /nas-ctm01/homes/pfsousa/meddiff/runs/wandb/run-20260523_175203-iflnt2xe/logs/debug.log
-2026-05-23 17:52:03,765 INFO    MainThread:961892 [wandb_init.py:_log_setup():522] Logging internal logs to /nas-ctm01/homes/pfsousa/meddiff/runs/wandb/run-20260523_175203-iflnt2xe/logs/debug-internal.log
-2026-05-23 17:52:03,765 INFO    MainThread:961892 [wandb_init.py:init():561] calling init triggers
-2026-05-23 17:52:03,765 INFO    MainThread:961892 [wandb_init.py:init():568] wandb.init called with sweep_config: {}
+2026-05-27 17:26:08,714 INFO    MainThread:1041612 [wandb_setup.py:_flush():76] Current SDK version is 0.16.6
+2026-05-27 17:26:08,714 INFO    MainThread:1041612 [wandb_setup.py:_flush():76] Configure stats pid to 1041612
+2026-05-27 17:26:08,714 INFO    MainThread:1041612 [wandb_setup.py:_flush():76] Loading settings from /nas-ctm01/homes/pfsousa/.config/wandb/settings
+2026-05-27 17:26:08,714 INFO    MainThread:1041612 [wandb_setup.py:_flush():76] Loading settings from /nas-ctm01/homes/pfsousa/meddiff/runs/wandb/settings
+2026-05-27 17:26:08,714 INFO    MainThread:1041612 [wandb_setup.py:_flush():76] Loading settings from environment variables: {}
+2026-05-27 17:26:08,714 INFO    MainThread:1041612 [wandb_setup.py:_flush():76] Inferring run settings from compute environment: {'program_relpath': 'runs/main_Vluna.py', 'program_abspath': '/nas-ctm01/homes/pfsousa/meddiff/runs/main_Vluna.py', 'program': '/nas-ctm01/homes/pfsousa/meddiff/runs/main_Vluna.py'}
+2026-05-27 17:26:08,714 INFO    MainThread:1041612 [wandb_setup.py:_flush():76] Applying login settings: {}
+2026-05-27 17:26:08,714 INFO    MainThread:1041612 [wandb_setup.py:_flush():76] Applying login settings: {}
+2026-05-27 17:26:08,714 INFO    MainThread:1041612 [wandb_init.py:_log_setup():521] Logging user logs to /nas-ctm01/homes/pfsousa/meddiff/runs/wandb/run-20260527_172608-28vn30u1/logs/debug.log
+2026-05-27 17:26:08,714 INFO    MainThread:1041612 [wandb_init.py:_log_setup():522] Logging internal logs to /nas-ctm01/homes/pfsousa/meddiff/runs/wandb/run-20260527_172608-28vn30u1/logs/debug-internal.log
+2026-05-27 17:26:08,714 INFO    MainThread:1041612 [wandb_init.py:init():561] calling init triggers
+2026-05-27 17:26:08,714 INFO    MainThread:1041612 [wandb_init.py:init():568] wandb.init called with sweep_config: {}
 config: {'dataV': 'V0', 'runV': 'Vluna'}
-2026-05-23 17:52:03,765 INFO    MainThread:961892 [wandb_init.py:init():611] starting backend
-2026-05-23 17:52:03,765 INFO    MainThread:961892 [wandb_init.py:init():615] setting up manager
-2026-05-23 17:52:03,770 INFO    MainThread:961892 [backend.py:_multiprocessing_setup():105] multiprocessing start_methods=fork,spawn,forkserver, using: spawn
-2026-05-23 17:52:03,772 INFO    MainThread:961892 [wandb_init.py:init():623] backend started and connected
-2026-05-23 17:52:03,784 INFO    MainThread:961892 [wandb_init.py:init():715] updated telemetry
-2026-05-23 17:52:03,835 INFO    MainThread:961892 [wandb_init.py:init():748] communicating run to backend with 90.0 second timeout
-2026-05-23 17:52:04,418 INFO    MainThread:961892 [wandb_run.py:_on_init():2357] communicating current version
-2026-05-23 17:52:04,459 INFO    MainThread:961892 [wandb_run.py:_on_init():2366] got version response upgrade_message: "wandb version 0.27.0 is available!  To upgrade, please run:\n $ pip install wandb --upgrade"
+2026-05-27 17:26:08,714 INFO    MainThread:1041612 [wandb_init.py:init():611] starting backend
+2026-05-27 17:26:08,714 INFO    MainThread:1041612 [wandb_init.py:init():615] setting up manager
+2026-05-27 17:26:08,719 INFO    MainThread:1041612 [backend.py:_multiprocessing_setup():105] multiprocessing start_methods=fork,spawn,forkserver, using: spawn
+2026-05-27 17:26:08,721 INFO    MainThread:1041612 [wandb_init.py:init():623] backend started and connected
+2026-05-27 17:26:08,733 INFO    MainThread:1041612 [wandb_init.py:init():715] updated telemetry
+2026-05-27 17:26:08,776 INFO    MainThread:1041612 [wandb_init.py:init():748] communicating run to backend with 90.0 second timeout
+2026-05-27 17:26:09,602 INFO    MainThread:1041612 [wandb_run.py:_on_init():2357] communicating current version
+2026-05-27 17:26:09,642 INFO    MainThread:1041612 [wandb_run.py:_on_init():2366] got version response upgrade_message: "wandb version 0.27.0 is available!  To upgrade, please run:\n $ pip install wandb --upgrade"
 
-2026-05-23 17:52:04,460 INFO    MainThread:961892 [wandb_init.py:init():799] starting run threads in backend
-2026-05-23 17:52:05,439 INFO    MainThread:961892 [wandb_run.py:_console_start():2335] atexit reg
-2026-05-23 17:52:05,439 INFO    MainThread:961892 [wandb_run.py:_redirect():2190] redirect: wrap_raw
-2026-05-23 17:52:05,439 INFO    MainThread:961892 [wandb_run.py:_redirect():2255] Wrapping output streams.
-2026-05-23 17:52:05,439 INFO    MainThread:961892 [wandb_run.py:_redirect():2280] Redirects installed.
-2026-05-23 17:52:05,440 INFO    MainThread:961892 [wandb_init.py:init():842] run started, returning control to user process
+2026-05-27 17:26:09,643 INFO    MainThread:1041612 [wandb_init.py:init():799] starting run threads in backend
+2026-05-27 17:26:11,407 INFO    MainThread:1041612 [wandb_run.py:_console_start():2335] atexit reg
+2026-05-27 17:26:11,407 INFO    MainThread:1041612 [wandb_run.py:_redirect():2190] redirect: wrap_raw
+2026-05-27 17:26:11,408 INFO    MainThread:1041612 [wandb_run.py:_redirect():2255] Wrapping output streams.
+2026-05-27 17:26:11,408 INFO    MainThread:1041612 [wandb_run.py:_redirect():2280] Redirects installed.
+2026-05-27 17:26:11,408 INFO    MainThread:1041612 [wandb_init.py:init():842] run started, returning control to user process
+2026-05-28 04:31:08,569 WARNING MsgRouterThr:1041612 [router.py:message_loop():77] message_loop has been closed

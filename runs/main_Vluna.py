@@ -60,5 +60,5 @@ run_logger = wandb.init(entity = "brightside51", project = run_args.model,
 #train_vqgan(luna25_args, run_args, run_logger)
 
 # DDPM Training Script
-train_ddpm(luna25_args, run_args, run_logger)
-#infer_ddpm(luna25_args, run_args, run_logger)
+#train_ddpm(luna25_args, run_args, run_logger)
+infer_ddpm(luna25_args, run_args, run_logger)
