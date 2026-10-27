@@ -44,8 +44,12 @@ def run_parser(
     parser.add_argument('--model', type = str, default = model)
     parser.add_argument('--runV', type = str, default = runV)
     parser.add_argument('--verbose', type = bool, default = True)
-    parser.add_argument('--base_fp', type = str,
-                        default = f"/nas-ctm01/homes/pfsousa")
+    if 'deucalion' in runV:
+        parser.add_argument('--base_fp', type = str,
+            default = "/projects/F202509580CPCAA1/pedrofsousa")
+    else:
+        parser.add_argument('--base_fp', type = str,
+            default = "/nas-ctm01/homes/pfsousa")
     args = parser.parse_args("")
 
     # --------------------------------------------------------------------------------------------

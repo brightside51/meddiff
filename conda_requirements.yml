@@ -1,4 +1,4 @@
-name: meddiff3
+name: meddiff
 channels:
   - conda-forge
   - nvidia
@@ -324,4 +324,4 @@ dependencies:
   - zstd=1.5.7=hb78ec9c_6
   - pip:
       - einops-exts==0.0.4
-prefix: /nas-ctm01/homes/pfsousa/.conda/envs/meddiff3
+prefix: /projects/F202509580CPCAA1/pedrofsousa/.conda/envs/meddiff

@@ -1,0 +1,75 @@
+model: meddiff
+runV: V0_deucalion
+verbose: false
+base_fp: /projects/F202509580CPCAA1/pedrofsousa
+args_fp: /projects/F202509580CPCAA1/pedrofsousa/meddiff/runs/args_V0_deucalion.yaml
+script_fp: /projects/F202509580CPCAA1/pedrofsousa/meddiff
+logs_fp: /projects/F202509580CPCAA1/pedrofsousa/meddiff/logs/run_V0_deucalion
+num_gpu: 2
+save_interval: 100
+loss_interval: 1
+log_interval: 100
+save_img: 4
+log_method: wandb
+seed: 1234
+vqgan:
+  resume: false
+  resume_ckpt: /projects/F202509580CPCAA1/pedrofsousa/meddiff/logs/run_V0_deucalion/vqgan/lightning_logs/version_1902090/checkpoints/latest_checkpoint.ckpt
+  num_steps: -1
+  num_epochs: 250
+  i3d_feat: false
+  restart_thres: 0.1
+  rand_restart: true
+  norm_type: group
+  pad_type: replicate
+  num_groups: 16
+  dim_latent: 16
+  num_codes: 8192
+  num_hidden: 128
+  downsample:
+  - 2
+  - 4
+  - 4
+  grad_clip: 0.5
+  grad_accum: 1
+  lr_base: 0.0002
+  lr_decay: 0.999
+  lr_step: 250
+  lr_min: 1.0e-06
+  opt_altern: 5
+  disc_channel: 64
+  disc_layer: 4
+  disc_start: 5000
+  disc_loss: hinge
+  img_weight: 1.0
+  vid_weight: 1.0
+  l1_weight: 4.0
+  ganfeat_weight: 2.0
+  percept_weight: 1.0
+ddpm:
+  resume: false
+  resume_ckpt: /projects/F202509580CPCAA1/pedrofsousa/meddiff/logs/run_V0_deucalion/ddpm/latest_ckpt.pt
+  num_step: 100000
+  num_ts: 500
+  num_epoch: -1
+  img_size: 48
+  num_channel: 16
+  dim_mult:
+  - 1
+  - 2
+  - 4
+  - 4
+  depth_size: 16
+  amp: true
+  grad_accum: 2
+  grad_maxnorm: 1.0
+  ema_update: 10
+  ema_start: 5000
+  ema_decay: 0.9999
+  lr_base: 0.0001
+  lr_decay: 0.999
+  lr_step: 250
+  lr_min: 1.0e-06
+infer:
+  num_sample: 4500
+  infer_fp: /nas-ctm01/datasets/public/medical_datasets/lung_ct_datasets/luna25_challenge/data_staging_area_II/protocol_1/data_npy_files/gen_nodule_exp1
